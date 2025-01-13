@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
@@ -51,11 +52,13 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.newsapp.model.SliderModel
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 
+@Preview
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun Slider(viewModel: SliderModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
@@ -107,6 +110,7 @@ fun Slider(viewModel: SliderModel = androidx.lifecycle.viewmodel.compose.viewMod
         modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
+            .height(250.dp)
     ) {
         if (isLoading) {
             Box(
@@ -116,57 +120,64 @@ fun Slider(viewModel: SliderModel = androidx.lifecycle.viewmodel.compose.viewMod
             }
         } else {
 
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                // Horizontal Pager for Image Slider
-                HorizontalPager(
-                    count = articles.size,
-                    state = pagerState,
+            // Horizontal Pager for Image Slider
+            HorizontalPager(
+                count = articles.size,
+                state = pagerState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+            ) { index ->
+                Card(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .height(200.dp)
-                ) { index ->
-                    Card(
-                        modifier = Modifier
-                            .width(320.dp)
-                            .height(200.dp),
-                        shape = RoundedCornerShape(12.dp),
-                        elevation = CardDefaults.elevatedCardElevation()
-                    ) {
+                        .width(320.dp)
+                        .height(200.dp),
+                    shape = RoundedCornerShape(12.dp),
+                    elevation = CardDefaults.elevatedCardElevation()
+                ) {
+
+                    Box {
                         Image(
                             painter = rememberAsyncImagePainter(model = articles[index].image_url),
                             contentDescription = "Image $index",
                             contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-                }
-            }
+                            modifier = Modifier.fillMaxSize(),
 
-            // Spacer(modifier = Modifier.height(16.dp))
 
-            // Modern Indicator Row
-            Row(
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                repeat(articles.size) { index ->
-                    Box(
-                        modifier = Modifier
-                            .size(12.dp)
-                            .padding(4.dp)
-                            .clip(RectangleShape)
-                            .background(
-                                color = if (pagerState.currentPage == index) Color.Blue else Color.Gray
                             )
-                    )
+
+                        Text(
+                            text = articles[index].title, // Replace with the appropriate property
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .padding(8.dp).align(Alignment.BottomCenter)
+                        )
+
+                    }
+
+
                 }
+
             }
         }
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Modern Indicator Row
+        // Pager Indicator
+        HorizontalPagerIndicator(
+            pagerState = pagerState,
+            activeColor = Color.Blue,
+            inactiveColor = Color.Gray,
+            modifier = Modifier
+                .padding(16.dp)
+                .align(Alignment.CenterHorizontally) // Center align the indicator
+
+        )
     }
+
 }
 
 

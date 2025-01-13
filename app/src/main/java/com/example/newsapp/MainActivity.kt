@@ -41,6 +41,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.newsapp.components.AppBar
+import com.example.newsapp.components.ListOfRecommendation
 import com.example.newsapp.components.Slider
 import com.example.newsapp.model.SliderModel
 import com.example.newsapp.ui.theme.NewsAppTheme
@@ -72,6 +73,7 @@ fun Show() {
         AppBar()
         val slideModel: SliderModel = viewModel(factory = factory)
         Slider(slideModel)
+        ListOfRecommendation(slideModel)
     }
 }
 

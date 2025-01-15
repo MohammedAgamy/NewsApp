@@ -1,6 +1,7 @@
 package com.example.newsapp.components
 
 import android.content.Intent
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.newsapp.model.SliderModel
 import com.example.newsapp.ui.AllNewsActivity
+import com.example.newsapp.ui.ArticleActivity
 
 @Preview
 @Composable
@@ -61,10 +63,12 @@ fun ListOfRecommendation(viewModel: SliderModel = androidx.lifecycle.viewmodel.c
         )
         Text(
             text = "View All ",
-            modifier = Modifier.padding(6.dp).clickable {
-                val intent = Intent(context ,AllNewsActivity::class.java)
-                context.startActivity(intent)
-            },
+            modifier = Modifier
+                .padding(6.dp)
+                .clickable {
+                    val intent = Intent(context, AllNewsActivity::class.java)
+                    context.startActivity(intent)
+                },
             fontWeight = FontWeight.Bold,
             color = Color.Blue,
             fontSize = 13.sp,
@@ -84,6 +88,15 @@ fun ListOfRecommendation(viewModel: SliderModel = androidx.lifecycle.viewmodel.c
                 modifier = Modifier
                     .fillMaxSize()
                     .background(color = Color.White)
+                    .clickable {
+                        // Open the article detail screen
+                        val intent = Intent(context, ArticleActivity::class.java).apply {
+                            putExtra("articleId", articles[index].article_id) // Pass article ID
+                        }
+                        Log.d("TAGID", articles[index].article_id)
+                        context.startActivity(intent)
+                    }
+
             ) {
                 Card(
                     modifier = Modifier

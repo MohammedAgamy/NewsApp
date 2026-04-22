@@ -31,7 +31,7 @@ import com.agamy.newsapp.data.RetrofitClient
 import com.agamy.newsapp.data.model.NewsModel
 import com.agamy.newsapp.data.model.NewsModelItem
 import com.agamy.newsapp.data.repository.NewsRepository
-/*
+
 
 @Composable
 fun NewsScreen (){
@@ -130,4 +130,4 @@ fun UserItem(newsModel: NewsModelItem) {
             )
         }
     }
-}*/
+}

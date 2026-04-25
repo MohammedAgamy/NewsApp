@@ -7,6 +7,6 @@ import retrofit2.http.GET
 interface ApiService {
 
     @GET("posts")
-    suspend fun getNews(): List<NewsModelItem>
+    suspend fun getNews(): NewsModel
 
 }

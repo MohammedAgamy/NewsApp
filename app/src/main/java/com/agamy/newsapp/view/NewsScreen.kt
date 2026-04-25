@@ -34,7 +34,7 @@ import com.agamy.newsapp.data.repository.NewsRepository
 
 
 @Composable
-fun NewsScreen (){
+fun NewsScreen() {
 
     val viewModel: NewsViewModel = viewModel(
         factory = NewsViewModelFactory(
@@ -64,14 +64,21 @@ fun NewsScreen (){
 
         // Render based on state
         when (state) {
-            is NewsState.IdIl -> IdleContent()
+            is NewsState.Idle -> IdleContent()
             is NewsState.Loading -> LoadingContent()
             is NewsState.Success -> UserListContent((state as NewsState.Success).news)
             is NewsState.Error -> ErrorContent((state as NewsState.Error).message)
+            NewsState.Empty -> EmptyContent()
         }
     }
 }
 
+@Composable
+fun EmptyContent() {
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text("No news found", color = Color.Gray)
+    }
+}
 
 @Composable
 fun IdleContent() {
@@ -100,18 +107,18 @@ fun ErrorContent(message: String) {
 }
 
 @Composable
-fun UserListContent(news: List<NewsModelItem>) {
+fun UserListContent(news: NewsModel) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(news) { news ->
-            UserItem(news)
+        items(news) { item ->
+            NewsItem(item)
         }
     }
 }
 
 @Composable
-fun UserItem(newsModel: NewsModelItem) {
+fun NewsItem(newsModel: NewsModelItem) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(4.dp)

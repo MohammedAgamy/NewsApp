@@ -5,10 +5,9 @@ import com.agamy.newsapp.data.model.NewsModelItem
 
 class NewsRepository(private val apiService: ApiService) {
 
-    suspend fun getNews(): Result<List<NewsModelItem>>{
+    suspend fun getNews(): Result<NewsModel>{
         return try {
-            val news = apiService.getNews()
-            Result.success(news)
+            Result.success(apiService.getNews()) // NewsModel ✅
 
         }catch (e: Exception){
             Result.failure(e)

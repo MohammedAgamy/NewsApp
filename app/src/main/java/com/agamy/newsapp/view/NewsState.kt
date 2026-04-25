@@ -3,9 +3,10 @@ package com.agamy.newsapp.view
 import com.agamy.newsapp.data.model.NewsModel
 
 sealed class NewsState {
-    object IdIl : NewsState()
+    object Idle : NewsState()
     object Loading : NewsState()
-    data class Success(val news: List<NewsModel>): NewsState()
-    data class Error(val message: String): NewsState()
+    object Empty : NewsState()
+    data class Success(val news: NewsModel) : NewsState()
+    data class Error(val message: String) : NewsState()
 
 }

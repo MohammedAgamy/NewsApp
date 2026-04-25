@@ -13,10 +13,14 @@ import kotlinx.coroutines.launch
 
 class NewsViewModel(private val repository: NewsRepository) : ViewModel() {
 
-    private val _state = MutableStateFlow<NewsState>(NewsState.IdIl)
+    private val _state = MutableStateFlow<NewsState>(NewsState.Idle)
     val state: StateFlow<NewsState> = _state
 
     private val intentChannel = Channel<NewsIntent>(Channel.UNLIMITED)
+
+    init {
+        handelIntent() // ✅ must call this so intents are processed
+    }
 
     // UI sends intents through here
     fun sendIntent(intent: NewsIntent) {
@@ -29,8 +33,8 @@ class NewsViewModel(private val repository: NewsRepository) : ViewModel() {
         viewModelScope.launch {
             intentChannel.consumeAsFlow().collect { intent ->
                 when (intent) {
-                    NewsIntent.LoadNews -> TODO()
-                    NewsIntent.RefreshNews -> TODO()
+                    NewsIntent.LoadNews -> fetchNews()
+                    NewsIntent.RefreshNews -> fetchNews()
                 }
             }
         }
@@ -41,7 +45,11 @@ class NewsViewModel(private val repository: NewsRepository) : ViewModel() {
 
         repository.getNews().fold(
             onSuccess = { news ->
-                _state.value = NewsState.Success(news)
+                _state.value = if (news.isEmpty()) {
+                    NewsState.Empty
+                } else {
+                    NewsState.Success(news)
+                }
 
             },
             onFailure = { error ->
